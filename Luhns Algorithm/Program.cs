@@ -18,7 +18,7 @@ namespace Luhns_Algorithm
                 Console.WriteLine("Enter a credit card number, no dashes, and I will compute the validity of the format: ");
                 String ccNumber;
                 ccNumber = Console.ReadLine();
-                if (ValidateCard(ccNumber))
+                if (ValidCardNum.ValidateCard(ccNumber))
                 {
                     Console.WriteLine(ccNumber + " appears to be a valid format.");
                 } else {
@@ -26,34 +26,39 @@ namespace Luhns_Algorithm
                 }
             }
         }
-        public static bool ValidateCard(String cardNumber)
+        public class ValidCardNum
         {
-            try
+            public static bool ValidateCard(String cardNumber)
             {
-                int cardLength = cardNumber.Length;
-
-                int sum = 0;
-                bool isSecond = false;
-                for (int i = cardLength - 1; i >= 0; i--)
+                try
                 {
-                    int digit = cardNumber[i] - '0';
+                    int cardLength = cardNumber.Length;
 
-                    if (isSecond)
+                    int sum = 0;
+                    bool isSecond = false;
+                    for (int i = cardLength - 1; i >= 0; i--)
                     {
-                        // Double every 2nd digit
-                        digit *= 2;
+                        int digit = cardNumber[i] - '0';
+
+                        if (isSecond)
+                        {
+                            // Double every 2nd digit
+                            digit *= 2;
+                        }
+
+                        sum += digit / 10;
+                        sum += digit % 10;
+
+                        isSecond = !isSecond; //Set it to the opposite of its current valid, switches back and forth between true and false
                     }
 
-                    sum += digit / 10;
-                    sum += digit % 10;
-
-                    isSecond = !isSecond; //Set it to the opposite of its current valid, switches back and forth between true and false
+                    // If a multiple of 10, card is valid
+                    return (sum % 10 == 0);
                 }
-
-                // If a multiple of 10, card is valid
-                return (sum % 10 == 0);
-            } catch (Exception) {
-                return false;
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
     }
